@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:project_ui/screens/location_screen.dart';
+import 'package:project_ui/screens/property_screen.dart';
 import 'package:project_ui/widgets/card_widget.dart';
 import 'package:project_ui/widgets/industry_land_widget.dart';
 
@@ -14,6 +16,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: const Icon(
@@ -23,7 +26,7 @@ class _MainScreenState extends State<MainScreen> {
         ),
         elevation: 0,
         backgroundColor: Colors.white,
-        title: Text(
+        title: const Text(
           'xentice',
           style: TextStyle(
             color: Colors.blue,
@@ -45,14 +48,17 @@ class _MainScreenState extends State<MainScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(
+              height: 10,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Container(
+              child: SizedBox(
                 height: size.height * 0.05,
                 width: size.width * 10,
                 child: TextField(
                   decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(
+                    focusedBorder: const OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Colors.grey,
                       ),
@@ -66,7 +72,7 @@ class _MainScreenState extends State<MainScreen> {
                     hintStyle: TextStyle(color: Colors.grey[400]),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5),
-                      borderSide: BorderSide(
+                      borderSide: const BorderSide(
                         color: Color.fromARGB(255, 227, 223, 223),
                       ),
                     ),
@@ -74,15 +80,21 @@ class _MainScreenState extends State<MainScreen> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Padding(
-              padding: EdgeInsets.only(left: 15),
+              padding: const EdgeInsets.only(left: 15),
               child: Row(
                 children: [
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      print('property');
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (context) {
+                        return PropertyScreen();
+                      }));
+                    },
                     child: Container(
                       height: size.height * 0.05,
                       width: size.width * 0.25,
@@ -94,7 +106,7 @@ class _MainScreenState extends State<MainScreen> {
                         // color: Colors.red,
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           'Property',
                           style: TextStyle(
@@ -105,13 +117,13 @@ class _MainScreenState extends State<MainScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   InkWell(
                     onTap: () {},
                     child: Container(
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           'Services',
                           style: TextStyle(
@@ -126,28 +138,34 @@ class _MainScreenState extends State<MainScreen> {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Container(
-                height: size.height * 0.12,
+              child: SizedBox(
+                height: 70,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
-                    return IndustrylandWidget(size: size);
-                  },
-                  separatorBuilder: (context, index) {
-                    return SizedBox(
-                      width: 5,
+                    return IndustrylandWidget(
+                      size: size,
+                      borderColor: Colors.grey,
+                      iconColor: Colors.black54,
+                      textColor: Colors.grey,
+                      ContainerColor: Colors.white,
                     );
                   },
-                  itemCount: 5,
+                  separatorBuilder: (context, index) {
+                    return const SizedBox(
+                      width: 7,
+                    );
+                  },
+                  itemCount: 4,
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Padding(
@@ -155,7 +173,7 @@ class _MainScreenState extends State<MainScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     'Commercial Office',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -173,15 +191,22 @@ class _MainScreenState extends State<MainScreen> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              child: Container(
+              child: SizedBox(
                 height: size.height * 0.2,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
-                    return CardWidget(size: size);
+                    return InkWell(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                          return LocationScreen();
+                        }));
+                      },
+                      child: CardWidget(size: size),
+                    );
                   },
                   separatorBuilder: (context, index) {
-                    return SizedBox(
+                    return const SizedBox(
                       width: 8,
                     );
                   },
@@ -194,8 +219,46 @@ class _MainScreenState extends State<MainScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     'Comercial office',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    'see all',
+                    style: TextStyle(
+                      color: Colors.grey[400],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              child: SizedBox(
+                height: size.height * 0.2,
+                child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return CardWidget(size: size);
+                    },
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(
+                        width: 5,
+                      );
+                    },
+                    itemCount: 5),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Commercial Office',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -220,45 +283,7 @@ class _MainScreenState extends State<MainScreen> {
                       return CardWidget(size: size);
                     },
                     separatorBuilder: (context, index) {
-                      return SizedBox(
-                        width: 5,
-                      );
-                    },
-                    itemCount: 5),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Commercial Office',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    'see all',
-                    style: TextStyle(
-                      color: Colors.grey[400],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
-              child: Container(
-                height: size.height * 0.2,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      return CardWidget(size: size);
-                    },
-                    separatorBuilder: (context, index) {
-                      return SizedBox(
+                      return const SizedBox(
                         width: 10,
                       );
                     },
