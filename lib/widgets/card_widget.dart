@@ -40,14 +40,14 @@ class _CardWidgetState extends State<CardWidget> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       'Woxro Office',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 15,
                       ),
                     ),
                     Text(
@@ -62,7 +62,7 @@ class _CardWidgetState extends State<CardWidget> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5),
+                padding: const EdgeInsets.only(bottom: 1),
                 child: Row(
                   children: [
                     Icon(

@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' ;
 import 'package:project_ui/screens/location_screen.dart';
 import 'package:project_ui/screens/property_screen.dart';
 import 'package:project_ui/widgets/card_widget.dart';
@@ -12,6 +15,36 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  List<dynamic> myMap=[];
+  // List<dynamic> myMap1=[];
+
+
+  Future apiFunction() async {
+    String url = 'https://api.xentice.com/api/postadSelect';
+    var responce =await get(Uri.parse(url));
+    print('-----------');
+    print(responce.body);
+    setState(() {
+      print('-----------');
+      myMap = jsonDecode(jsonDecode(responce.body)['propertyType']['id']);
+      print(myMap);
+      // print('----------------');
+      // print(myMap);
+      // myMap1 = jsonDecode(myMap.first)['id'];
+      // print('---------------------');
+      // print(myMap1);
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    apiFunction();
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -144,7 +177,7 @@ class _MainScreenState extends State<MainScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: SizedBox(
-                height: 70,
+                height: 80,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {

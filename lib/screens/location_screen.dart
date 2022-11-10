@@ -89,11 +89,13 @@ class LocationScreen extends StatelessWidget {
           Container(
             height: 300,
             width: 300,
-            color: Colors.red,
-            child: Center(child: Text('map',style: TextStyle(color: Colors.white,fontSize: 30),)),
+            // color: Colors.red,
+            decoration: BoxDecoration(
+              image: DecorationImage(image: AssetImage('assets/map.jpg'), )
+            ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -101,12 +103,11 @@ class LocationScreen extends StatelessWidget {
                   height: 50,
                   width: 150,
                   decoration: BoxDecoration(
-                    // color: Colors.green,
-                    border: Border.all(
-                      color: Color.fromARGB(255, 12, 71, 159),
-                    ),
-                    borderRadius: BorderRadius.circular(5)
-                  ),
+                      // color: Colors.green,
+                      border: Border.all(
+                        color: Color.fromARGB(255, 12, 71, 159),
+                      ),
+                      borderRadius: BorderRadius.circular(5)),
                   child: Center(
                     child: Text(
                       'Back',
