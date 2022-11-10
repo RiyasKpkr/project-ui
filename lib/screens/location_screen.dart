@@ -99,22 +99,27 @@ class LocationScreen extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Container(
-                  height: 50,
-                  width: 150,
-                  decoration: BoxDecoration(
-                      // color: Colors.green,
-                      border: Border.all(
-                        color: Color.fromARGB(255, 12, 71, 159),
-                      ),
-                      borderRadius: BorderRadius.circular(5)),
-                  child: Center(
-                    child: Text(
-                      'Back',
-                      style: TextStyle(
-                        color: Colors.blue[900],
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    height: 50,
+                    width: 150,
+                    decoration: BoxDecoration(
+                        // color: Colors.green,
+                        border: Border.all(
+                          color: Color.fromARGB(255, 12, 71, 159),
+                        ),
+                        borderRadius: BorderRadius.circular(5)),
+                    child: Center(
+                      child: Text(
+                        'Back',
+                        style: TextStyle(
+                          color: Colors.blue[900],
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
