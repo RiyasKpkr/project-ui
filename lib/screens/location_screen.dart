@@ -1,153 +1,253 @@
 import 'package:flutter/material.dart';
-import 'package:project_ui/widgets/progress_widget.dart';
-import 'package:project_ui/widgets/textfield_widget.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:step_progress_indicator/step_progress_indicator.dart';
 
-class LocationScreen extends StatelessWidget {
-  const LocationScreen({super.key});
+class LocationScreen extends StatefulWidget {
+  LocationScreen({Key? key,required this.location}) : super(key: key);
+  List location;
+
+  @override
+  State<LocationScreen> createState() => _LocationScreenState();
+}
+
+class _LocationScreenState extends State<LocationScreen> {
+  TextEditingController cityCtr = TextEditingController();
+  TextEditingController localityCtr = TextEditingController();
+  TextEditingController streetCtr = TextEditingController();
+  TextEditingController countryCtr = TextEditingController();
+
+  @override
+  void initState() {
+    countryCtr.text=widget.location[0];
+    cityCtr.text = widget.location[1];
+    localityCtr.text = widget.location[2];
+    streetCtr.text = widget.location[3];
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        leading: const Icon(
-          Icons.sort,
-          color: Colors.black,
-          size: 30,
-        ),
+        backgroundColor: Colors.transparent,
         elevation: 0,
-        backgroundColor: Colors.white,
-        title: const Text(
-          'xentice',
-          style: TextStyle(
-            color: Colors.blue,
-            fontSize: 35,
-            fontWeight: FontWeight.normal,
-          ),
-        ),
+        title: Text('xentice',
+            style: TextStyle(
+                color: Colors.blue[700],
+                fontSize: 35,
+                fontWeight: FontWeight.w400)),
+        leading: Icon(Icons.sort, color: Colors.blue[900], size: 35),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 15),
-            child: Image.asset(
-              'assets/profile-pictures.png',
-              width: 50,
+            padding: EdgeInsets.only(right: size.width * .03),
+            child: CircleAvatar(
+              foregroundImage: AssetImage('assets/profile-pictures.png'),
             ),
-          ),
+          )
         ],
       ),
       body: Column(
         children: [
-          ProgressWidget(size: size, text: '3/4', value: 0.75),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-            child: Container(
-              height: 40,
-              width: 500,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: Colors.grey[300],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Text(
-                  'India',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 20,
+          //progress Indicator.........................................
+          Container(
+            width: size.width,
+            height: size.height * .1,
+            color: Colors.grey[300],
+            child: Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: size.width * .04),
+                  child: CircularStepProgressIndicator(
+                    totalSteps: 4,
+                    currentStep: 3,
+                    stepSize: 10,
+                    selectedColor: Colors.indigo[900],
+                    unselectedColor: Colors.white,
+                    padding: 0,
+                    width: size.height * .075,
+                    height: size.height * .075,
+                    selectedStepSize: 10,
+                    roundedCap: (_, __) => false,
+                    child: Center(
+                        child: Text(
+                      '3/4',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    )),
                   ),
                 ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: size.height * .02,
+                    ),
+                    Text(
+                      'Location',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: size.height * .005,
+                    ),
+                    Text(
+                      'Progress Details  >',
+                      style: TextStyle(fontWeight: FontWeight.w500),
+                    )
+                  ],
+                )
+              ],
+            ),
+          ),
+          SizedBox(
+            height: size.height * .02,
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: size.width * .04),
+            child: TextField(
+              controller: countryCtr,
+              readOnly: true,
+              decoration: InputDecoration(
+                  border: InputBorder.none,
+                  filled: true,
+                  fillColor: Colors.grey),
+            ),
+          ),
+          SizedBox(
+            height: size.height * .025,
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: size.width * .04),
+            child: TextField(
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+              controller: cityCtr,
+              readOnly: true,
+              decoration: InputDecoration(
+                  labelStyle: TextStyle(
+                      color: Colors.grey[500],
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20),
+                  isDense: true,
+                  labelText: 'City',
+                  border: OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black38))),
+            ),
+          ),
+          SizedBox(
+            height: size.height * .025,
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: size.width * .04),
+            child: TextField(
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+              controller: localityCtr,
+              readOnly: true,
+              decoration: InputDecoration(
+                  labelStyle: TextStyle(
+                      color: Colors.grey[500],
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20),
+                  isDense: true,
+                  labelText: 'Locality',
+                  border: OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black38))),
+            ),
+          ),
+          SizedBox(
+            height: size.height * .025,
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: size.width * .04),
+            child: TextField(
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+              controller: streetCtr,
+              readOnly: true,
+              decoration: InputDecoration(
+                  labelStyle: TextStyle(
+                      color: Colors.grey[500],
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20),
+                  isDense: true,
+                  labelText: 'Street',
+                  border: OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black38))),
+            ),
+          ),
+          SizedBox(
+            height: size.height * .02,
+          ),
+          //map....................................................................
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: size.width * .04),
+            child: Container(
+              height: size.height * .3,
+              width: double.infinity,
+              child: GoogleMap(
+                myLocationEnabled: true,
+
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(widget.location[4],widget.location[5]),
+                  zoom: 11,
+                ),
+                mapType: MapType.normal,
+
+                // onMapCreated: (controller) {
+                //   _controller.complete(controller);
+                // },
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 15,
-              vertical: 10,
-            ),
-            child: TextFieldWidget(
-              labelText: Text('Cochin'),
-            ),
+          SizedBox(
+            height: size.height * .02,
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 15,
-              vertical: 10,
-            ),
-            child: TextFieldWidget(
-              labelText: Text('Cochin'),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 15,
-              vertical: 10,
-            ),
-            child: TextFieldWidget(
-              labelText: Text('Cochin'),
-            ),
-          ),
-          Container(
-            height: 300,
-            width: 300,
-            // color: Colors.red,
-            decoration: BoxDecoration(
-              image: DecorationImage(image: AssetImage('assets/map.jpg'), )
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+            padding: EdgeInsets.symmetric(horizontal: size.width * .04),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
+                  onTap: () => Navigator.pop(context),
                   child: Container(
-                    height: 50,
-                    width: 150,
+                    width: size.width * .4,
+                    height: size.height * .055,
                     decoration: BoxDecoration(
-                        // color: Colors.green,
-                        border: Border.all(
-                          color: Color.fromARGB(255, 12, 71, 159),
-                        ),
-                        borderRadius: BorderRadius.circular(5)),
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(color: Colors.indigo[900]!)),
                     child: Center(
                       child: Text(
                         'Back',
                         style: TextStyle(
-                          color: Colors.blue[900],
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: Colors.indigo[900]),
                       ),
                     ),
                   ),
                 ),
                 Container(
-                  height: 50,
-                  width: 150,
+                  width: size.width * .4,
+                  height: size.height * .055,
                   decoration: BoxDecoration(
-                    color: Colors.blue[900],
-                    borderRadius: BorderRadius.circular(5),
-                    border: Border.all(
-                      color: Color.fromARGB(255, 12, 71, 159),
-                    ),
-                  ),
+                    color: Colors.indigo[900],
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(color: Colors.indigo[900]!)),
                   child: Center(
                     child: Text(
                       'Continue',
                       style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.white),
                     ),
                   ),
                 ),
               ],
             ),
-          ),
+          )
         ],
       ),
     );

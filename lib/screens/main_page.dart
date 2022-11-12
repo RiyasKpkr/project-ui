@@ -1,169 +1,153 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' ;
-import 'package:project_ui/screens/location_screen.dart';
+import 'package:project_ui/model/services.dart';
 import 'package:project_ui/screens/property_screen.dart';
 import 'package:project_ui/widgets/card_widget.dart';
 import 'package:project_ui/widgets/industry_land_widget.dart';
+import 'package:shimmer/shimmer.dart';
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+
+class HomePage extends StatefulWidget {
+  HomePage({Key? key}) : super(key: key);
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _MainScreenState extends State<MainScreen> {
-  List<dynamic> myMap=[];
-  // List<dynamic> myMap1=[];
-
-
-  Future apiFunction() async {
-    String url = 'https://api.xentice.com/api/postadSelect';
-    var responce =await get(Uri.parse(url));
-    print('-----------');
-    print(responce.body);
-    setState(() {
-      print('-----------');
-      myMap = jsonDecode(jsonDecode(responce.body)['propertyType']['id']);
-      print(myMap);
-      // print('----------------');
-      // print(myMap);
-      // myMap1 = jsonDecode(myMap.first)['id'];
-      // print('---------------------');
-      // print(myMap1);
-    });
-  }
+class _HomePageState extends State<HomePage> {
+  bool isClicked = true;
+  var isSelected;
 
   @override
   void initState() {
-    // TODO: implement initState
+    Services.getData();
     super.initState();
-    apiFunction();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Colors.white,
-      resizeToAvoidBottomInset: false,
+      //appBar
       appBar: AppBar(
-        leading: const Icon(
-          Icons.sort,
-          color: Colors.black,
-          size: 30,
-        ),
+        backgroundColor: Colors.transparent,
         elevation: 0,
-        backgroundColor: Colors.white,
-        title: const Text(
-          'xentice',
-          style: TextStyle(
-            color: Colors.blue,
-            fontSize: 35,
-            fontWeight: FontWeight.normal,
-          ),
-        ),
+        title: Text('xentice',
+            style: TextStyle(
+                color: Colors.blue[700],
+                fontSize: 35,
+                fontWeight: FontWeight.w400)),
+        leading: Icon(Icons.sort, color: Colors.blue[900], size: 35),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 15),
-            child: Image.asset(
-              'assets/profile-pictures.png',
-              width: 50,
+            padding: EdgeInsets.only(right: size.width * .03),
+            child: CircleAvatar(
+              foregroundImage: AssetImage('assets/profile-pictures.png'),
             ),
-          ),
+          )
         ],
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              height: 10,
-            ),
+            SizedBox(height: size.height * .03),
+            //search box
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: SizedBox(
-                height: size.height * 0.05,
-                width: size.width * 10,
+              padding: EdgeInsets.symmetric(horizontal: size.width * .03),
+              child: Container(
+                height: size.height * .05,
                 child: TextField(
+                  style: TextStyle(
+                    fontSize: 14,
+                  ),
                   decoration: InputDecoration(
-                    focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.grey,
-                      ),
-                    ),
-                    contentPadding: EdgeInsets.all(0),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black26),
+                        borderRadius: BorderRadius.circular(8)),
                     hintText: 'Search',
-                    prefixIcon: Icon(
-                      Icons.search,
-                      color: Colors.grey[400],
-                    ),
-                    hintStyle: TextStyle(color: Colors.grey[400]),
+                    contentPadding: EdgeInsets.all(0),
+                    prefixIcon:
+                        Icon(Icons.search, size: 28, color: Colors.black26),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5),
-                      borderSide: const BorderSide(
-                        color: Color.fromARGB(255, 227, 223, 223),
-                      ),
-                    ),
+                        borderSide: BorderSide(color: Colors.black26),
+                        borderRadius: BorderRadius.circular(8)),
                   ),
                 ),
               ),
             ),
-            const SizedBox(
-              height: 10,
+            SizedBox(
+              height: size.height * .015,
             ),
+            //property Services button
             Padding(
-              padding: const EdgeInsets.only(left: 15),
+              padding: EdgeInsets.symmetric(horizontal: size.width * .03),
               child: Row(
                 children: [
                   InkWell(
                     onTap: () {
-                      print('property');
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (context) {
-                        return PropertyScreen();
-                      }));
+                      isClicked = true;
+                      setState(() {});
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PropertyScreen(
+                              propertyType: Services.correctdata,
+                            ),
+                          ));
                     },
                     child: Container(
-                      height: size.height * 0.05,
-                      width: size.width * 0.25,
+                      height: size.height * .045,
+                      width: size.width * .3,
                       decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black26,
-                          width: 1,
-                        ),
-                        // color: Colors.red,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Center(
+                          borderRadius: BorderRadius.circular(8),
+                          border: isClicked == true
+                              ? Border.all(
+                                  color: Colors.black26,
+                                )
+                              : null),
+                      child: Center(
                         child: Text(
                           'Property',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold),
+                          style: isClicked == true
+                              ? TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: 15)
+                              : TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black54,
+                                  fontSize: 15),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 10,
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      isClicked = false;
+                      setState(() {});
+                    },
                     child: Container(
-                      child: const Center(
+                      height: size.height * .045,
+                      width: size.width * .3,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          border: isClicked != true
+                              ? Border.all(
+                                  color: Colors.black26,
+                                )
+                              : null),
+                      child: Center(
                         child: Text(
                           'Services',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.grey,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: isClicked != true
+                              ? TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: 15)
+                              : TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black54,
+                                  fontSize: 15),
                         ),
                       ),
                     ),
@@ -171,157 +155,178 @@ class _MainScreenState extends State<MainScreen> {
                 ],
               ),
             ),
-            const SizedBox(
-              height: 10,
+            SizedBox(
+              height: size.height * .03,
             ),
+            //card industrial land
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: SizedBox(
-                height: 80,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return IndustrylandWidget(
-                      size: size,
-                      borderColor: Colors.grey,
-                      iconColor: Colors.black54,
-                      textColor: Colors.grey,
-                      ContainerColor: Colors.white,
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(
-                      width: 7,
-                    );
-                  },
-                  itemCount: 4,
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Commercial Office',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                  Text(
-                    'see all',
-                    style: TextStyle(
-                      color: Colors.grey[400],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              child: SizedBox(
-                height: size.height * 0.2,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context){
-                          return LocationScreen();
-                        }));
-                      },
-                      child: CardWidget(size: size),
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(
-                      width: 8,
-                    );
-                  },
-                  itemCount: 5,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Comercial office',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    'see all',
-                    style: TextStyle(
-                      color: Colors.grey[400],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              child: SizedBox(
-                height: size.height * 0.2,
-                child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      return CardWidget(size: size);
-                    },
-                    separatorBuilder: (context, index) {
-                      return const SizedBox(
-                        width: 5,
-                      );
-                    },
-                    itemCount: 5),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Commercial Office',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    'see all',
-                    style: TextStyle(
-                      color: Colors.grey[400],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              padding: EdgeInsets.symmetric(horizontal: size.width * .03),
               child: Container(
-                height: size.height * 0.2,
-                child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      return CardWidget(size: size);
-                    },
-                    separatorBuilder: (context, index) {
-                      return const SizedBox(
-                        width: 10,
+                width: double.infinity,
+                height: size.height * .1,
+                child: FutureBuilder(
+                  future: Services.getData(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Shimmer(
+                          child: Container(),
+                          gradient: LinearGradient(
+                              colors: [Colors.grey[300]!, Colors.grey[100]!]));
+                    } else if (snapshot.hasError) {
+                      return Text(snapshot.error.toString());
+                    } else {
+                      return ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                                onTap: () {
+                                  isSelected = index;
+                                  setState(() {});
+                                },
+                                child: CardIndustrialLand(
+                                  propertyType: Services.correctdata[index],
+                                  isSelected: isSelected,
+                                  index: index,
+                                ));
+                          },
+                          separatorBuilder: (context, index) =>
+                              SizedBox(width: size.width * .03),
+                          itemCount: Services.correctdata.length);
+                    }
+                  },
+                ),
+              ),
+            ),
+            SizedBox(height: size.height * .03),
+            //Commercial office
+            FutureBuilder(
+              future: Services.getData(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Shimmer(
+                      child: Container(),
+                      gradient: LinearGradient(
+                          colors: [Colors.grey[300]!, Colors.grey[100]!]));
+                } else if (snapshot.hasError) {
+                  return Text(snapshot.error.toString());
+                } else {
+
+                  return ListView.separated(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    physics: ScrollPhysics(),
+                    itemBuilder: (context, i) {
+                      return Padding(
+                        padding: EdgeInsets.only(bottom: size.height * .01),
+                        child: SizedBox(
+                          width: size.width,
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding:
+                                    EdgeInsets.only(left: size.width * .02),
+                                child: Align(
+                                  alignment: AlignmentDirectional.topStart,
+                                  child: Text(
+                                    Services.correctdata[i],
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15),
+                                  ),
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment(1, 0),
+                                child: Padding(
+                                  padding:
+                                      EdgeInsets.only(right: size.width * .03),
+                                  child: Text(
+                                    'see all',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 14,
+                                        color: Colors.black54),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: size.height * .02,
+                              ),
+                              SizedBox(
+                                height: size.height * .225,
+                                width: double.infinity,
+                                child: FutureBuilder(
+                                  future: Services.getData(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return Shimmer.fromColors(
+                                        baseColor: Colors.grey[300]!,
+                                        highlightColor: Colors.grey[100]!,
+                                        child: Container(
+                                          height: size.height * .225,
+                                          width: size.width * .48,
+                                          color: Colors.white,
+                                        ),
+                                      );
+                                    } else if (snapshot.hasError) {
+                                      return Text(snapshot.error.toString());
+                                    } else {
+                                      return Container(
+                                        height: size.height * .225,
+                                        child: ListView.separated(
+                                            physics: BouncingScrollPhysics(),
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: size.width * .025),
+                                            scrollDirection: Axis.horizontal,
+                                            itemCount: snapshot.data.length,
+                                            itemBuilder: (context, index) {
+                                              if (Services.correctdata[i] ==
+                                                  snapshot.data[index]
+                                                      .propertyType) {
+                                                return OfficeCard(
+                                                    images: snapshot
+                                                        .data[index].images
+                                                        .toString(),
+                                                    officeName: snapshot
+                                                        .data[index]
+                                                        .propertyType,
+                                                    location: snapshot
+                                                        .data[index].location);
+                                              } else {
+                                                return SizedBox(
+                                                  width: 0,
+                                                );
+                                              }
+                                            },
+                                            separatorBuilder: (context, index) {
+                                              if (Services.correctdata[i] ==
+                                                  snapshot.data[index]
+                                                      .propertyType) {
+                                                return SizedBox(
+                                                  width: size.width * .02,
+                                                );
+                                              } else {
+                                                return SizedBox();
+                                              }
+                                            }),
+                                      );
+                                    }
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       );
                     },
-                    itemCount: 5),
-              ),
+                    separatorBuilder: (context, index) {
+                      return SizedBox(height: size.height * .03);
+                    },
+                    itemCount: Services.correctdata.length,
+                  );
+                }
+              },
             )
           ],
         ),

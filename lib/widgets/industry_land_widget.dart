@@ -1,48 +1,40 @@
 import 'package:flutter/material.dart';
 
-class IndustrylandWidget extends StatelessWidget {
-  const IndustrylandWidget({
-    Key? key,
-    required this.size,
-    required this.borderColor,
-    required this.iconColor,
-    required this.textColor,
-    required this.ContainerColor,
-  }) : super(key: key);
-  final Color borderColor;
-  final Size size;
-  final Color iconColor;
-  final Color textColor;
-  final Color ContainerColor;
+class CardIndustrialLand extends StatefulWidget {
+   CardIndustrialLand({Key? key,required var this.isSelected,required var this.index,required String this.propertyType}) : super(key: key);
+  var isSelected;
+  var index;
+  String propertyType;
+
+  @override
+  State<CardIndustrialLand> createState() => _CardIndustrialLandState();
+}
+
+class _CardIndustrialLandState extends State<CardIndustrialLand> {
 
   @override
   Widget build(BuildContext context) {
+    Size size=MediaQuery.of(context).size;
     return Container(
-      height: 70,
-      width: 70,
+      height: size.height * .1,
+      width: size.width * .2,
       decoration: BoxDecoration(
-        color: ContainerColor,
-        borderRadius: BorderRadius.circular(5),
-        border: Border.all(
-          color: borderColor,
-          // color: Colors.grey,
-        ),
+        color: widget.isSelected==widget.index?Colors.indigo[900]:Colors.white,
+        border: Border.all(color: Colors.black26),
+        borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Image.asset(
-            'assets/stack_icon.png',
-            width: 40,
-            color: iconColor,
-            // color: Colors.black54,
-          ),
-          Text(
-            'Industry \n   land',
-            style: TextStyle(
-              color: textColor
-              // color: Colors.grey,
-            ),
+          Image.asset('assets/stack_icon.png',color: widget.isSelected==widget.index?Colors.white:Colors.black87,
+              width: size.width * .1),
+          Padding(
+            padding:  EdgeInsets.only(top: size.height*.005),
+            child: Text(widget.propertyType,textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: size.width*0.035,
+
+                    color: widget.isSelected==widget.index?Colors.white:Colors.black54,
+                    fontWeight: FontWeight.w500)),
           ),
         ],
       ),

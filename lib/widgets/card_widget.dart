@@ -1,103 +1,129 @@
-// import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:project_ui/screens/location_screen.dart';
 
-class CardWidget extends StatefulWidget {
-  const CardWidget({
-    Key? key,
-    required this.size,
-  }) : super(key: key);
-
-  final Size size;
+class OfficeCard extends StatefulWidget {
+  OfficeCard(
+      {Key? key,
+      required this.images,
+      required this.location,
+      required this.officeName})
+      : super(key: key);
+  String images, officeName;
+  List location;
 
   @override
-  State<CardWidget> createState() => _CardWidgetState();
+  State<OfficeCard> createState() => _OfficeCardState();
 }
 
-class _CardWidgetState extends State<CardWidget> {
-  bool isClicked = true;
+class _OfficeCardState extends State<OfficeCard> {
+  bool isItFavorite = false;
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          height: widget.size.height * 0.19,
-          width: widget.size.width * 0.45,
-          decoration: BoxDecoration(
-            // color: Colors.green,
-            border: Border.all(color: Colors.grey),
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: Column(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(5),
-                child: Image.asset(
-                  'assets/office-image.jpg',
-                  // height: size.height * 0.1,
-                  fit: BoxFit.fill,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Woxro Office',
-                      style: TextStyle(
-                        fontSize: 15,
+    Size size = MediaQuery.of(context).size;
+    return InkWell(
+      onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LocationScreen(location: widget.location),
+          )),
+      child: Container(
+        height: size.height * .225,
+        width: size.width * .48,
+        decoration: BoxDecoration(
+            border: Border.all(color: Colors.black26),
+            borderRadius: BorderRadius.circular(8)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Stack(
+              children: [
+                Container(
+                  width: double.infinity,
+                    height: size.height*.13,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Image.network(widget.images,fit: BoxFit.cover,)),
+                Positioned(
+                  top: size.height * .01,
+                  right: size.width * .02,
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        isItFavorite = !isItFavorite;
+                      });
+                    },
+                    child: isItFavorite == false
+                        ? CircleAvatar(
+                            backgroundColor: Colors.black38,
+                            radius: size.width * .03,
+                            child: Center(
+                                child: Icon(
+                              Icons.favorite,
+                              size: size.width * .035,
+                              color: Colors.white,
+                            )),
+                          )
+                        : CircleAvatar(
+                            backgroundColor: Colors.white,
+                            radius: size.width * .03,
+                            child: Center(
+                                child: Icon(
+                              Icons.favorite,
+                              size: size.width * .035,
+                              color: Colors.red,
+                            )),
+                          ),
+                  ),
+                )
+              ],
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: size.width * .02),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: size.height * .01,
+                  ),
+                  Column(
+                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Align(
+                        alignment: AlignmentDirectional.topStart,
+                        child: Text(
+                          widget.officeName,
+                          style: TextStyle(fontWeight: FontWeight.w500),
+                        ),
                       ),
-                    ),
-                    Text(
-                      'Rs.2500/Hr',
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 1),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.room,
-                      color: Colors.green,
-                    ),
-                    Text('Thissur')
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        Positioned(
-          right: 10,
-          top: 5,
-          child: InkWell(
-            onTap: () {
-              setState(() {
-                isClicked = !isClicked;
-              });
-            },
-            child: CircleAvatar(
-              radius: 15,
-              backgroundColor:
-                  isClicked == true ? Colors.white24 : Colors.white,
-              child: Icon(
-                Icons.favorite,
-                color: isClicked == true ? Colors.white : Colors.red,
-                size: 20,
+                      Align(
+                        alignment: AlignmentDirectional.topEnd,
+                        child: Text(
+                          'Rs. 2500/Hr',
+                          style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 12),
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: size.height * .01,
+                  ),
+                  Row(
+                    children: [
+                      Icon(Icons.location_pin, color: Colors.green[800]),
+                      Text(widget.location[1],
+                          style: TextStyle(fontWeight: FontWeight.w500)),
+                    ],
+                  ),
+                ],
               ),
             ),
-          ),
-        )
-      ],
+          ],
+        ),
+      ),
     );
   }
 }
